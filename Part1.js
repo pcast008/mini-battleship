@@ -4,16 +4,24 @@ let rowLetter
 let colNumber
 let guesses = []
 let ships = 0
-
-const grid = {
-    A: { 1: "O", 2: "O", 3: "O" },
-    B: { 1: "O", 2: "O", 3: "O" },
-    C: { 1: "O", 2: "O", 3: "O" }
-}
+let grid
 
 startGame()
 
+function buildGrid() {
+    grid = {
+        A: { 1: "O", 2: "O", 3: "O" },
+        B: { 1: "O", 2: "O", 3: "O" },
+        C: { 1: "O", 2: "O", 3: "O" }
+    }
+}
+
 function resetGame() {
+    clearGuesses()
+    buildGrid()
+}
+
+function clearGuesses() {
     guesses = []
 }
 
@@ -21,7 +29,7 @@ function startGame() {
     rs.keyIn('Press any key to start the game. ')
 
     let userLocation = askForUserLocation() 
-
+    buildGrid()
     generateRandomRowAndCol()
     placeShip()
     generateRandomRowAndCol()
@@ -39,9 +47,11 @@ function startGame() {
         if (checkHit(userLocation)) {
             if (ships === 0) {
                 if (playAgain()) {
+                    console.table(grid)
                     resetGame()
                     startGame()
                 } else {
+                    console.table(grid)
                     process.exit()
                 }
             } else {
