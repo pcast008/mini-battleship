@@ -1,4 +1,4 @@
-var rs = require('readline-sync');
+var rs = require('readline-sync')
 
 let rowLetter
 let colNumber
