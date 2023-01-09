@@ -22,10 +22,10 @@ Now we are going to make the game a little more realistic.
 1. Rewrite the code so that we use letters A-J and numbers 1-10. This will create a 100 unit grid.
 2. If you haven't already, create a function that builds the grid. This function will take a single number argument to build the grid accordingly. (i.e. buildGrid(3) will create a 3x3 grid (9 units), buildGrid(5) will create a 5x5 grid (25 units) buildGrid(10) creates a 10x10 (100 units), etc). 
 3. The computer will now place multiple ships in this format:
-* One two-unit ship
-* Two three-unit ships
-* One four-unit ship
-* One five-unit ship
+  * One two-unit ship
+  * Two three-unit ships
+  * One four-unit ship
+  * One five-unit ship
 4. Keep in mind that your code cannot place two ships on intersecting paths
 5. Ship placement should be random (horizontally and vertically placed) and not manually placed by you in the code
 6. Ships must be placed within the grid boundaries
