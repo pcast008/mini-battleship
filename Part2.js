@@ -7,6 +7,7 @@ let startingLetter
 let startingNumber
 let shipPlacementSuccessful = false
 let grid = {}
+let shipSunk = false
 // let displayGrid = {}
 let guesses = []
 let shipCount = 0
@@ -33,39 +34,85 @@ let ships = [
     }
 ]
 
-buildGrid(10)
-placeAllShips()
-console.log(shipCount)
-console.log(ships)
-console.table(grid)
+startGame()
 
+function startGame() {
+    rs.keyIn('Press any key to start the game. ')
 
-function resetGame() {
-    clearGuesses()
+    let userLocation = askForUserLocation() 
     buildGrid(10)
+    placeAllShips()
+
+    while (shipCount > 0) {
+
+        while (checkUserLocationExistence(userLocation)) {
+            console.log("You have already picked this location. Miss!")
+            userLocation = askForUserLocation() 
+        }
+        
+        if (checkHit(userLocation)) {
+            if (shipCount === 0) {
+                if (playAgain()) {
+                    resetGame()
+                    startGame()
+                } else {
+                    process.exit()
+                }
+            } else {
+                if (shipSunk) {
+                    console.log(`Hit. You have sunk a battleship. ${shipCount} ${shipCount > 1 ? "ships" : "ship"} remaining.`)
+                } else {
+                    console.log("Hit.")
+                }
+            }
+        } else {
+            console.log("You have missed!")
+        }
+    
+        shipSunk = false
+        userLocation = askForUserLocation()
+    }
 }
 
-function clearGuesses() {
+function playAgain() {
+    const playAgain = rs.keyInYN("You have destroyed all battleships. Would you like to play again? Y/N: ")
+    return playAgain ? true : false
+}
+
+function resetGame() {
     guesses = []
 }
 
 function checkHit(loc) {
-    const row = loc[0]
-    const col = loc.slice(1)
+    let hitShip = ships.filter(ship => {
+        return ship.locations.includes(loc)
+    })[0]
 
-    ships.forEach(ship => {
-        ship.locations.forEach(location => {
-            if (location === loc) {
-                grid[row][col] === "X"
-                logGuess(loc)
-                return true
-            }
-        })
-    })
+    if (hitShip !== undefined) {
+        ships[ships.indexOf(hitShip)].locations.splice(hitShip.locations.indexOf(loc), 1)
 
-    grid[row][col] === "O"
-    logGuess(loc)
+        // console.table(grid)
+
+        if (checkShipSunk(hitShip)) {
+            shipSunk = true
+            return true
+        }
+
+        return true
+    }
+
+    // console.table(grid)
+
     return false
+}
+
+function checkShipSunk(ship) {
+    if (ship.locations.length === 0) {
+        shipCount--
+        return true
+    } else {
+        return false
+    }
 }
 
 function logGuess(loc) {
@@ -88,8 +135,6 @@ function askForUserLocation() {
 
     return row.concat(col)
 }
-
-
 
 function buildGrid(n) {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"

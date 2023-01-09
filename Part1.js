@@ -17,11 +17,6 @@ function buildGrid() {
 }
 
 function resetGame() {
-    clearGuesses()
-    buildGrid()
-}
-
-function clearGuesses() {
     guesses = []
 }
 
@@ -36,22 +31,18 @@ function startGame() {
     placeShip()
     
     while (ships > 0) {
-        // check if location exists - if exists, ask for location again
+
         while (checkUserLocationExistence(userLocation)) {
             console.log("You have already picked this location. Miss!")
             userLocation = askForUserLocation() 
         }
         
-        // if location does not exist, was there a hit
-        
         if (checkHit(userLocation)) {
             if (ships === 0) {
                 if (playAgain()) {
-                    console.table(grid)
                     resetGame()
                     startGame()
                 } else {
-                    console.table(grid)
                     process.exit()
                 }
             } else {
@@ -75,11 +66,9 @@ function checkHit(loc) {
     const col = loc[1]
 
     if (grid[row][col] === "X") {
-        logGuess(loc)
         ships--
         return true
     } else {
-        logGuess(loc)
         return false
     }
 }
